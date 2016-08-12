@@ -1,0 +1,10 @@
+---
+vms:
+- name: master.adam.vm
+  box: slalompdx/centos-7
+  roles:
+  - pe-puppet-master
+- name: agent.adam.vm
+  box: slalompdx/centos-7
+  roles:
+  - pe-puppet-agent

@@ -1,0 +1,28 @@
+---
+roles:
+  pe-puppet-master:
+    private_networks:
+      - {ip: '0.0.0.0', auto_network: true}
+    providers:
+      - type: virtualbox
+        linked_clone: true
+        customize:
+          - [modifyvm, !ruby/sym id, '--ioapic', 'on']
+          - [modifyvm, !ruby/sym id, '--memory', 8128]
+          - [modifyvm, !ruby/sym id, '--cpus', 4]
+    provisioners:
+      - {type: hosts, sync_hosts: true}
+      - {type: pe_bootstrap, role: !ruby/sym master}
+
+  pe-puppet-agent:
+    private_networks:
+      - {ip: '0.0.0.0', auto_network: true}
+    providers:
+      - type: virtualbox
+        linked_clone: true
+        customize:
+          - [modifyvm, !ruby/sym id, '--ioapic', 'on']
+          - [modifyvm, !ruby/sym id, '--cpus', 4]
+    provisioners:
+      - {type: hosts, sync_hosts: true}
+      - {type: pe_agent, master: pe-puppet-master}
